@@ -1,0 +1,19 @@
+<div class="header">
+  <div class="header-menu">
+    <button
+      class="header-button"
+      (click)="goToPhotos()"
+      [class.active]="router.url.startsWith('/photos')"
+    >
+      Photos
+    </button>
+    <button
+      class="header-button"
+      (click)="goToFavorites()"
+      [class.active]="router.url.startsWith('/favorites')"
+    >
+      Favorites
+    </button>
+  </div>
+  <h3 class="header-title">XM IMAGES</h3>
+</div>

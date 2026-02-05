@@ -1,0 +1,24 @@
+@use 'variables' as *;
+
+button {
+  padding: 8px;
+  height: 50px;
+  border: none;
+  border-radius: 5px;
+  background-color: $primary-color;
+  color: white;
+  font-size: 16px;
+  transition: box-shadow 120ms ease, transform 120ms ease;
+
+  &:hover {
+    background-color: $primary-color-dark;
+    cursor: pointer;
+  }
+}
+
+button.active {
+  box-shadow: 0 6px 14px rgba(2, 6, 23, 0.22);
+  background-color: $secondary-color;
+  transform: translateY(-1px);
+  cursor: default;
+}
