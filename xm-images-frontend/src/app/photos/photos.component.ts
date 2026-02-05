@@ -1,44 +1,41 @@
 import {
-  AfterViewInit,
   Component,
-  ElementRef,
+  effect,
+  HostListener,
   inject,
   OnDestroy,
-  ViewChild,
-  HostListener,
+  Signal,
 } from '@angular/core';
-import { ImagesStore } from '../../store/images.store';
+import { Image, ImagesStore } from '../../store/images.store';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-photos',
-  imports: [],
+  imports: [LoaderComponent],
   templateUrl: './photos.component.html',
   styleUrls: ['./photos.component.scss'],
 })
-export class PhotosComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('sentinel', { static: false }) sentinel?: ElementRef<HTMLElement>;
+export class PhotosComponent implements OnDestroy {
   private store = inject(ImagesStore);
-  public images = this.store.images;
-  public favoriteImages = this.store.favoriteImages;
 
-  ngAfterViewInit() {
-    this.loadUntilScrollable();
-  }
+  public images: Signal<Image[]> = this.store.images;
+  public favoriteImages: Signal<Image[]> = this.store.favoriteImages;
+
+  private initImagesEffect = effect(() => {
+    const img = this.images();
+
+    const bodyHeight = document.body.offsetHeight;
+    const windowHeight = window.innerHeight;
+
+    if (bodyHeight < windowHeight) {
+      setTimeout(() => {
+        this.store.loadImages();
+      }, 100);
+    }
+  });
 
   isImageFavorited(image: any): boolean {
     return this.favoriteImages().some((fav) => fav.id === image.id);
-  }
-
-  private loadUntilScrollable() {
-    setTimeout(() => {
-      const bodyHeight = document.body.offsetHeight;
-      const windowHeight = window.innerHeight;
-
-      if (bodyHeight < windowHeight) {
-        this.store.loadImages();
-        this.loadUntilScrollable();
-      }
-    }, 100);
   }
 
   onImageClick(image: any): void {
@@ -46,8 +43,10 @@ export class PhotosComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('window:scroll', [])
-  onScroll(): void {
-    const scrollPosition = window.innerHeight + window.scrollY;
+  onScroll() {
+    if (this.store.loading()) return;
+
+    const scrollPosition = window.scrollY + window.innerHeight;
     const threshold = document.body.offsetHeight - 200;
 
     if (scrollPosition >= threshold) {

@@ -10,6 +10,5 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 })
 export class LoaderComponent {
   private store = inject(ImagesStore);
-
   loading = this.store.loading;
 }

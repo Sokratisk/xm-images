@@ -1,0 +1,16 @@
+.single-photo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 50px);
+  gap: 24px;
+
+  .no-hover {
+    &:hover {
+      box-shadow: none !important;
+      transform: none !important;
+      cursor: default !important;
+    }
+  }
+}

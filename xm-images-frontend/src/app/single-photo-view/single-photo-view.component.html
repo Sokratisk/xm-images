@@ -1,0 +1,10 @@
+@if (image()) {
+  <div class="single-photo">
+    <div class="photos-single no-hover">
+      <img [src]="image()!.download_url" [alt]="image()!.id" />
+    </div>
+    <button class="header-button" (click)="onRemoveClick()">
+      Remove from Favorites
+    </button>
+  </div>
+}

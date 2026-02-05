@@ -3,23 +3,14 @@ import { Image } from '../store/images.store';
 const STORAGE_KEY = 'xm_images';
 
 function readStorage(): Image[] {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (!stored) return [];
-    const parsed = JSON.parse(stored);
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    console.warn('localStorage read failed');
-    return [];
-  }
+  const stored = localStorage.getItem(STORAGE_KEY);
+  if (!stored) return [];
+  const parsed = JSON.parse(stored);
+  return Array.isArray(parsed) ? parsed : [];
 }
 
 function writeStorage(items: Image[]) {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-  } catch {
-    console.warn('localStorage write failed');
-  }
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
 }
 
 export const localStorageService = {
